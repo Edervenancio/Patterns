@@ -1,26 +1,23 @@
-<?php 
+<?php
 
 namespace Source\Repositories;
 
 use Source\Database\DatabaseInterface;
 
-class InventoryRepositories
-{
+class InventoryRepositories {
 
     private $dbConnection;
-    
-    public function __construct(DatabaseInterface $dbConnection)
-    {
+
+    public function __construct(DatabaseInterface $dbConnection) {
         $this->dbConnection = $dbConnection;
     }
 
-    public function insertInventory($dataPost)
-    {
+    public function insertInventory($dataPost) {
 
         if (empty($dataPost)) {
             return false;
-        } 
-        
+        }
+
         $pdo = $this->dbConnection->connect();
         $sql = $pdo->prepare('INSERT INTO inventory (productName, descriptions, price, quantity)
                                  VALUES (:product, :descriptions, :price, :quantity)');
@@ -31,23 +28,20 @@ class InventoryRepositories
 
         $res = $sql->execute();
 
-        if($res == false)
-        {
+        if ($res == false) {
             return false;
-        } 
+        }
 
         return $res;
     }
 
-    public function editPage($id)
-    {
-       header('Location: src/View/editPage.php?id=' . $id);
+    public function editPage($id) {
+        header('Location: src/View/editPage.php?id=' . $id);
     }
 
-    public function storeUpdate($dataPost)
-    {
+    public function storeUpdate($dataPost) {
 
-      
+
         $pdo = $this->dbConnection->connect();
 
         $sql = "UPDATE inventory SET productName = :product, descriptions = :descriptions, 
@@ -67,19 +61,17 @@ class InventoryRepositories
         return true;
     }
 
-    
-    public function selectAll()
-    {
+
+    public function selectAll() {
         $pdo = $this->dbConnection->connect();
         $sql = "SELECT * FROM inventory";
         $sql = $pdo->prepare($sql);
         $sql->execute();
         $result = $sql->fetchAll();
-        return $result;   
+        return $result;
     }
-    
-    public function showProduct($id)
-    {
+
+    public function showProduct($id) {
         $pdo = $this->dbConnection->connect();
         $sql = "SELECT * FROM inventory where id = :id LIMIT 1";
         $sql = $pdo->prepare($sql);
@@ -89,6 +81,19 @@ class InventoryRepositories
         return $result;
     }
 
-    
+    public function delete($id) {
+
+        $pdo = $this->dbConnection->connect();
+        $sql = "DELETE FROM inventory WHERE id = :id";
+        $sql = $pdo->prepare($sql);
+        $sql->bindValue(':id', $id);
+        $resultado = $sql->execute();
+
+        if ($resultado == 0) {
+            return false;
+        }
+
+        return true;
+    }
 
 }

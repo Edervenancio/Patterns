@@ -17,6 +17,24 @@ class InventoryService {
         $db = new MySQL();
         $insert = new InventoryRepositories($db);
         $res = $insert->insertInventory($_POST);
+
+      
+
+        // $price = filter_var($price, FILTER_VALIDATE_FLOAT);
+        // $quantity = filter_var($quantity, FILTER_VALIDATE_INT);
+        if (!empty($res)) {
+            return $res;
+        } else {
+            return false;
+        }
+    }
+
+    public function delete($id)
+    {
+        $db = new MySQL();
+        $delete = new InventoryRepositories($db);
+        $res = $delete->delete($id);
+
         if (!empty($res)) {
             return $res;
         } else {
@@ -64,4 +82,6 @@ class InventoryService {
             return $select->selectAll();
         }
     }
+
+
 }

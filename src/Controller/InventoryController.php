@@ -25,6 +25,15 @@ class InventoryController
         return $createEdit->editPage($id);
     }
 
+  
+
+    public function delete($id)
+    {
+        $delete = new InventoryService();
+        $delete->delete($id);
+        return header('Location: index.php');
+
+    }
     public function storeUpdate()
     {
         $update = new InventoryService();
